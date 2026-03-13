@@ -4,7 +4,6 @@ export interface WishItem {
   category: string;
   estimatedCost: number | null;
   url: string;
-  person: "Me" | "Wife";
   purchased: boolean;
   createdAt: string;
 }
@@ -18,3 +17,5 @@ export const DEFAULT_CATEGORIES = [
   "Travel",
   "Other",
 ] as const;
+
+export type SortOption = "newest" | "oldest" | "price-high" | "price-low" | "name";
