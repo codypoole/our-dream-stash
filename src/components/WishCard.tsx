@@ -1,5 +1,6 @@
+import { forwardRef } from "react";
 import { WishItem } from "@/lib/types";
-import { Check, ExternalLink, Trash2, Undo2 } from "lucide-react";
+import { Check, ExternalLink, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { CategoryBadge } from "./CategoryBadge";
@@ -10,7 +11,7 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-export function WishCard({ item, onToggle, onDelete }: Props) {
+export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onDelete }, ref) => {
   return (
     <motion.div
       layout
