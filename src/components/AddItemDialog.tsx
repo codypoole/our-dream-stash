@@ -20,6 +20,7 @@ interface Props {
 }
 
 export function AddItemDialog({ onAdd }: Props) {
+  const { visibleCategories } = useCategories();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
