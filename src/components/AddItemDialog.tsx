@@ -11,24 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import { DEFAULT_CATEGORIES, WishItem } from "@/lib/types";
+import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const categoryEmojis: Record<string, string> = {
-  Electronics: "⚡",
-  Home: "🏠",
-  Clothing: "👗",
-  Books: "📚",
-  Kitchen: "🍳",
-  Travel: "✈️",
-  Other: "✨",
-};
+import { useCategories } from "@/hooks/useCategories";
 
 interface Props {
   onAdd: (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => void;
 }
 
 export function AddItemDialog({ onAdd }: Props) {
+  const { visibleCategories } = useCategories();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -87,19 +79,19 @@ export function AddItemDialog({ onAdd }: Props) {
           <div className="space-y-2">
             <Label className="text-sm font-medium">Category</Label>
             <div className="flex flex-wrap gap-2">
-              {DEFAULT_CATEGORIES.map((cat) => (
+              {visibleCategories.map((cat) => (
                 <button
-                  key={cat}
+                  key={cat.id}
                   type="button"
-                  onClick={() => setCategory(cat)}
+                  onClick={() => setCategory(cat.name)}
                   className={cn(
                     "rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 border",
-                    category === cat
+                    category === cat.name
                       ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105"
                       : "bg-card text-muted-foreground border-border hover:border-primary/30"
                   )}
                 >
-                  {categoryEmojis[cat]} {cat}
+                  {cat.emoji} {cat.name}
                 </button>
               ))}
             </div>

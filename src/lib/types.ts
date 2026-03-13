@@ -8,14 +8,21 @@ export interface WishItem {
   createdAt: string;
 }
 
-export const DEFAULT_CATEGORIES = [
-  "Electronics",
-  "Home",
-  "Clothing",
-  "Books",
-  "Kitchen",
-  "Travel",
-  "Other",
-] as const;
+export interface Category {
+  id: string;
+  name: string;
+  emoji: string;
+  hidden: boolean;
+}
+
+export const DEFAULT_CATEGORIES: Category[] = [
+  { id: "electronics", name: "Electronics", emoji: "⚡", hidden: false },
+  { id: "home", name: "Home", emoji: "🏠", hidden: false },
+  { id: "clothing", name: "Clothing", emoji: "👗", hidden: false },
+  { id: "books", name: "Books", emoji: "📚", hidden: false },
+  { id: "kitchen", name: "Kitchen", emoji: "🍳", hidden: false },
+  { id: "travel", name: "Travel", emoji: "✈️", hidden: false },
+  { id: "other", name: "Other", emoji: "✨", hidden: false },
+];
 
 export type SortOption = "newest" | "oldest" | "price-high" | "price-low" | "name";
