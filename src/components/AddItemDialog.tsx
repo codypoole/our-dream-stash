@@ -79,19 +79,19 @@ export function AddItemDialog({ onAdd }: Props) {
           <div className="space-y-2">
             <Label className="text-sm font-medium">Category</Label>
             <div className="flex flex-wrap gap-2">
-              {DEFAULT_CATEGORIES.map((cat) => (
+              {visibleCategories.map((cat) => (
                 <button
-                  key={cat}
+                  key={cat.id}
                   type="button"
-                  onClick={() => setCategory(cat)}
+                  onClick={() => setCategory(cat.name)}
                   className={cn(
                     "rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 border",
-                    category === cat
+                    category === cat.name
                       ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105"
                       : "bg-card text-muted-foreground border-border hover:border-primary/30"
                   )}
                 >
-                  {categoryEmojis[cat]} {cat}
+                  {cat.emoji} {cat.name}
                 </button>
               ))}
             </div>

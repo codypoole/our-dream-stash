@@ -129,7 +129,7 @@ const Index = () => {
         </div>
 
         {/* Items list */}
-        <div className="space-y-2.5 pb-8">
+        <div className="space-y-2.5 pb-20">
           <AnimatePresence mode="popLayout">
             {filtered.length === 0 ? (
               <motion.div
