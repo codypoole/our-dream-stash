@@ -85,5 +85,6 @@ export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onD
         </motion.button>
       </div>
     </motion.div>
-  );
-}
+});
+
+WishCard.displayName = "WishCard";
