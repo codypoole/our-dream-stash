@@ -1,4 +1,3 @@
-import { forwardRef } from "react";
 import { WishItem } from "@/lib/types";
 import { Check, ExternalLink, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,9 +10,11 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onDelete }, ref) => {
+const MotionCard = motion.div;
+
+export function WishCard({ item, onToggle, onDelete }: Props) {
   return (
-    <motion.div
+    <MotionCard
       layout
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -24,7 +25,6 @@ export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onD
         item.purchased && "opacity-50"
       )}
     >
-      {/* Purchased ribbon */}
       {item.purchased && (
         <div className="absolute top-0 right-0 rounded-bl-xl bg-purchased px-3 py-1 text-xs font-semibold text-purchased-foreground">
           Got it! 🎊
@@ -32,7 +32,6 @@ export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onD
       )}
 
       <div className="flex items-start gap-3">
-        {/* Toggle button */}
         <motion.button
           whileTap={{ scale: 0.85 }}
           onClick={() => onToggle(item.id)}
@@ -75,7 +74,6 @@ export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onD
           )}
         </div>
 
-        {/* Delete */}
         <motion.button
           whileTap={{ scale: 0.85 }}
           onClick={() => onDelete(item.id)}
@@ -84,7 +82,6 @@ export const WishCard = forwardRef<HTMLDivElement, Props>(({ item, onToggle, onD
           <Trash2 className="h-3.5 w-3.5" />
         </motion.button>
       </div>
-    </motion.div>
-});
-
-WishCard.displayName = "WishCard";
+    </MotionCard>
+  );
+}
