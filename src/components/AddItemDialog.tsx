@@ -11,18 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import { DEFAULT_CATEGORIES, WishItem } from "@/lib/types";
+import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const categoryEmojis: Record<string, string> = {
-  Electronics: "⚡",
-  Home: "🏠",
-  Clothing: "👗",
-  Books: "📚",
-  Kitchen: "🍳",
-  Travel: "✈️",
-  Other: "✨",
-};
+import { useCategories } from "@/hooks/useCategories";
 
 interface Props {
   onAdd: (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => void;
