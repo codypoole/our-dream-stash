@@ -2,49 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@700;800&display=swap');
+
 @layer base {
   :root {
-    --background: 30 25% 97%;
-    --foreground: 20 10% 15%;
+    --background: 40 30% 96%;
+    --foreground: 240 10% 12%;
 
-    --card: 30 20% 99%;
-    --card-foreground: 20 10% 15%;
+    --card: 40 25% 99%;
+    --card-foreground: 240 10% 12%;
 
-    --popover: 30 20% 99%;
-    --popover-foreground: 20 10% 15%;
+    --popover: 40 25% 99%;
+    --popover-foreground: 240 10% 12%;
 
-    --primary: 14 60% 52%;
-    --primary-foreground: 30 25% 97%;
+    --primary: 340 65% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 30 15% 92%;
-    --secondary-foreground: 20 10% 25%;
+    --secondary: 45 80% 92%;
+    --secondary-foreground: 35 60% 30%;
 
-    --muted: 30 12% 93%;
-    --muted-foreground: 20 5% 52%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 240 5% 45%;
 
-    --accent: 30 15% 92%;
-    --accent-foreground: 20 10% 25%;
+    --accent: 200 70% 92%;
+    --accent-foreground: 200 60% 25%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 30 25% 97%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 30 12% 88%;
-    --input: 30 12% 88%;
-    --ring: 14 60% 52%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 340 65% 55%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --purchased: 142 50% 42%;
-    --purchased-foreground: 30 25% 97%;
+    --purchased: 155 55% 45%;
+    --purchased-foreground: 0 0% 100%;
 
-    --sidebar-background: 30 20% 95%;
-    --sidebar-foreground: 20 10% 25%;
-    --sidebar-primary: 14 60% 52%;
-    --sidebar-primary-foreground: 30 25% 97%;
-    --sidebar-accent: 30 15% 90%;
-    --sidebar-accent-foreground: 20 10% 25%;
-    --sidebar-border: 30 12% 88%;
-    --sidebar-ring: 14 60% 52%;
+    --tag-electronics: 220 75% 92%;
+    --tag-electronics-fg: 220 60% 35%;
+    --tag-home: 35 80% 90%;
+    --tag-home-fg: 35 60% 30%;
+    --tag-clothing: 310 60% 92%;
+    --tag-clothing-fg: 310 45% 35%;
+    --tag-books: 150 50% 90%;
+    --tag-books-fg: 150 45% 28%;
+    --tag-kitchen: 20 75% 90%;
+    --tag-kitchen-fg: 20 60% 30%;
+    --tag-travel: 200 70% 90%;
+    --tag-travel-fg: 200 55% 28%;
+    --tag-other: 260 50% 92%;
+    --tag-other-fg: 260 40% 35%;
+
+    --sidebar-background: 40 20% 95%;
+    --sidebar-foreground: 240 10% 25%;
+    --sidebar-primary: 340 65% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 15% 90%;
+    --sidebar-accent-foreground: 240 10% 25%;
+    --sidebar-border: 40 15% 88%;
+    --sidebar-ring: 340 65% 55%;
   }
 }
 
@@ -55,6 +72,12 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
   }
 }
