@@ -20,11 +20,12 @@ interface Props {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onPriority: (id: string) => void;
+  onOpen: (id: string) => void;
 }
 
 const MotionCard = motion.div;
 
-export function WishCard({ item, onToggle, onDelete, onPriority }: Props) {
+export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
@@ -61,7 +62,11 @@ export function WishCard({ item, onToggle, onDelete, onPriority }: Props) {
             {item.purchased && <Check className="h-3.5 w-3.5" />}
           </motion.button>
 
-          <div className="min-w-0 flex-1">
+          <button
+            type="button"
+            onClick={() => onOpen(item.id)}
+            className="min-w-0 flex-1 text-left"
+          >
             <div className="flex items-center gap-2 mb-1.5">
               <CategoryBadge category={item.category} />
               {item.estimatedCost != null && (
@@ -79,19 +84,9 @@ export function WishCard({ item, onToggle, onDelete, onPriority }: Props) {
               {item.name}
             </h3>
             {item.note && (
-              <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{item.note}</p>
+              <p className="mt-1 text-xs text-muted-foreground line-clamp-1">{item.note}</p>
             )}
-            {item.url && (
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 inline-flex items-center gap-1 text-xs text-primary hover:underline"
-              >
-                View link <ExternalLink className="h-3 w-3" />
-              </a>
-            )}
-          </div>
+          </button>
 
           <div className="flex flex-col items-center gap-1">
             {!item.purchased && (

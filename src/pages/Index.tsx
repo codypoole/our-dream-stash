@@ -5,6 +5,7 @@ import { AddItemDialog } from "@/components/AddItemDialog";
 import { WishCard } from "@/components/WishCard";
 import { CategoryFilter } from "@/components/CategoryBadge";
 import { PrioritySwapDialog } from "@/components/PrioritySwapDialog";
+import { WishDetailDrawer } from "@/components/WishDetailDrawer";
 import { SortOption } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { ArrowDownUp, Eye, EyeOff, Filter, Search, Sparkles, Star } from "lucide-react";
@@ -28,6 +29,7 @@ const Index = () => {
   const [swapDialogOpen, setSwapDialogOpen] = useState(false);
   const [pendingPriorityId, setPendingPriorityId] = useState<string | null>(null);
   const [showControls, setShowControls] = useState(false);
+  const [detailItemId, setDetailItemId] = useState<string | null>(null);
 
   const handleAddItem = (item: Parameters<typeof addItem>[0] & { priority?: boolean }) => {
     addItem(item);
@@ -257,6 +259,7 @@ const Index = () => {
                   onToggle={togglePurchased}
                   onDelete={deleteItem}
                   onPriority={handlePriority}
+                  onOpen={(id) => setDetailItemId(id)}
                 />
               ))
             )}
@@ -270,6 +273,15 @@ const Index = () => {
         priorityItems={getPriorityItems()}
         newItemName={pendingItem?.name ?? ""}
         onSwap={handleSwap}
+      />
+
+      <WishDetailDrawer
+        item={items.find((i) => i.id === detailItemId) ?? null}
+        open={!!detailItemId}
+        onOpenChange={(open) => { if (!open) setDetailItemId(null); }}
+        onToggle={togglePurchased}
+        onDelete={deleteItem}
+        onPriority={handlePriority}
       />
     </div>
   );
