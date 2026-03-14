@@ -7,7 +7,7 @@ import { CategoryFilter } from "@/components/CategoryBadge";
 import { PrioritySwapDialog } from "@/components/PrioritySwapDialog";
 import { SortOption } from "@/lib/types";
 import { Input } from "@/components/ui/input";
-import { ArrowDownUp, Eye, EyeOff, Search, Sparkles, Star } from "lucide-react";
+import { ArrowDownUp, Eye, EyeOff, Filter, Search, Sparkles, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
