@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
