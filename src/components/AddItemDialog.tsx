@@ -44,6 +44,7 @@ export function AddItemDialog({ onAdd }: Props) {
       category,
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
+      note: note.trim(),
     });
     reset();
     setOpen(false);
