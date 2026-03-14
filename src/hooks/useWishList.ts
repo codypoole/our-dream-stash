@@ -13,18 +13,31 @@ export function useWishList() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [items]);
 
-  const addItem = (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => {
+  const addItem = (item: Omit<WishItem, "id" | "purchased" | "priority" | "createdAt">) => {
     setItems((prev) => [
       {
         ...item,
         note: item.note ?? "",
         id: crypto.randomUUID(),
         purchased: false,
+        priority: false,
         createdAt: new Date().toISOString(),
       },
       ...prev,
     ]);
   };
+
+  const priorityCount = items.filter((i) => i.priority && !i.purchased).length;
+
+  const togglePriority = (id: string) => {
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, priority: !item.priority } : item
+      )
+    );
+  };
+
+  const getPriorityItems = () => items.filter((i) => i.priority && !i.purchased);
 
   const togglePurchased = (id: string) => {
     setItems((prev) =>
@@ -38,5 +51,5 @@ export function useWishList() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  return { items, addItem, togglePurchased, deleteItem };
+  return { items, addItem, togglePurchased, deleteItem, togglePriority, priorityCount, getPriorityItems };
 }

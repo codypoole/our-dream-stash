@@ -6,6 +6,7 @@ export interface WishItem {
   url: string;
   note: string;
   purchased: boolean;
+  priority: boolean;
   createdAt: string;
 }
 

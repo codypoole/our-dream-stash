@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
 
 interface Props {
-  onAdd: (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => void;
+  onAdd: (item: Omit<WishItem, "id" | "purchased" | "priority" | "createdAt">) => void;
 }
 
 export function AddItemDialog({ onAdd }: Props) {

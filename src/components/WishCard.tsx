@@ -1,5 +1,5 @@
 import { WishItem } from "@/lib/types";
-import { Check, ExternalLink, Trash2 } from "lucide-react";
+import { Check, ExternalLink, Star, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { CategoryBadge } from "./CategoryBadge";
@@ -8,11 +8,12 @@ interface Props {
   item: WishItem;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onPriority: (id: string) => void;
 }
 
 const MotionCard = motion.div;
 
-export function WishCard({ item, onToggle, onDelete }: Props) {
+export function WishCard({ item, onToggle, onDelete, onPriority }: Props) {
   return (
     <MotionCard
       layout
@@ -22,7 +23,8 @@ export function WishCard({ item, onToggle, onDelete }: Props) {
       transition={{ duration: 0.25, ease: "easeOut" }}
       className={cn(
         "group relative overflow-hidden rounded-2xl border bg-card p-4 transition-shadow duration-200 hover:shadow-md",
-        item.purchased && "opacity-50"
+        item.purchased && "opacity-50",
+        item.priority && !item.purchased && "border-amber-400/50 shadow-sm shadow-amber-500/10"
       )}
     >
       {item.purchased && (
@@ -53,6 +55,9 @@ export function WishCard({ item, onToggle, onDelete }: Props) {
                 ${item.estimatedCost.toFixed(2)}
               </span>
             )}
+            {item.priority && !item.purchased && (
+              <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+            )}
           </div>
           <h3
             className={cn(
@@ -62,6 +67,9 @@ export function WishCard({ item, onToggle, onDelete }: Props) {
           >
             {item.name}
           </h3>
+          {item.note && (
+            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{item.note}</p>
+          )}
           {item.url && (
             <a
               href={item.url}
@@ -74,13 +82,30 @@ export function WishCard({ item, onToggle, onDelete }: Props) {
           )}
         </div>
 
-        <motion.button
-          whileTap={{ scale: 0.85 }}
-          onClick={() => onDelete(item.id)}
-          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </motion.button>
+        <div className="flex flex-col items-center gap-1">
+          {!item.purchased && (
+            <motion.button
+              whileTap={{ scale: 0.85 }}
+              onClick={() => onPriority(item.id)}
+              className={cn(
+                "flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors",
+                item.priority
+                  ? "text-amber-500"
+                  : "text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-amber-500"
+              )}
+              title={item.priority ? "Remove priority" : "Set as priority"}
+            >
+              <Star className={cn("h-3.5 w-3.5", item.priority && "fill-amber-500")} />
+            </motion.button>
+          )}
+          <motion.button
+            whileTap={{ scale: 0.85 }}
+            onClick={() => onDelete(item.id)}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </motion.button>
+        </div>
       </div>
     </MotionCard>
   );
