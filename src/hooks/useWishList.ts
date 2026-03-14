@@ -17,6 +17,7 @@ export function useWishList() {
     setItems((prev) => [
       {
         ...item,
+        note: item.note ?? "",
         id: crypto.randomUUID(),
         purchased: false,
         createdAt: new Date().toISOString(),

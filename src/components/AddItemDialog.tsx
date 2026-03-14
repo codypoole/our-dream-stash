@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
@@ -26,12 +27,14 @@ export function AddItemDialog({ onAdd }: Props) {
   const [category, setCategory] = useState("");
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
+  const [note, setNote] = useState("");
 
   const reset = () => {
     setName("");
     setCategory("");
     setCost("");
     setUrl("");
+    setNote("");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,6 +45,7 @@ export function AddItemDialog({ onAdd }: Props) {
       category,
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
+      note: note.trim(),
     });
     reset();
     setOpen(false);
@@ -125,6 +129,18 @@ export function AddItemDialog({ onAdd }: Props) {
                 className="rounded-xl h-11"
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="note" className="text-sm font-medium">Note (optional)</Label>
+            <Textarea
+              id="note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Any details or thoughts..."
+              className="rounded-xl min-h-[60px] resize-none"
+              rows={2}
+            />
           </div>
 
           <Button

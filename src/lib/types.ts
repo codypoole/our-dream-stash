@@ -4,6 +4,7 @@ export interface WishItem {
   category: string;
   estimatedCost: number | null;
   url: string;
+  note: string;
   purchased: boolean;
   createdAt: string;
 }

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, Pencil, EyeOff, Eye, Sparkles } from "lucide-react";
 
-const EMOJI_OPTIONS = ["⚡", "🏠", "👗", "📚", "🍳", "✈️", "✨", "🎮", "💄", "🎁", "🏋️", "🎨", "🎵", "📱", "🛋️", "🧸"];
+
 
 export default function Categories() {
   const { categories, addCategory, editCategory, toggleHidden } = useCategories();
@@ -158,22 +158,14 @@ export default function Categories() {
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-medium">Emoji</Label>
-              <div className="flex flex-wrap gap-2">
-                {EMOJI_OPTIONS.map((e) => (
-                  <button
-                    key={e}
-                    type="button"
-                    onClick={() => setEmoji(e)}
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl text-lg transition-all border ${
-                      emoji === e
-                        ? "bg-primary/10 border-primary scale-110"
-                        : "bg-card border-border hover:border-primary/30"
-                    }`}
-                  >
-                    {e}
-                  </button>
-                ))}
-              </div>
+              <Input
+                value={emoji}
+                onChange={(e) => setEmoji(e.target.value)}
+                placeholder="Tap to pick an emoji"
+                className="rounded-xl h-11 text-2xl text-center"
+                maxLength={2}
+              />
+              <p className="text-xs text-muted-foreground">Type or paste any emoji from your keyboard</p>
             </div>
             <Button
               type="submit"
