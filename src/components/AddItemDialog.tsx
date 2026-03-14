@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -10,17 +10,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Plus, Star } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
 
 interface Props {
-  onAdd: (item: Omit<WishItem, "id" | "purchased" | "priority" | "createdAt">) => void;
+  onAdd: (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => void;
+  priorityCount: number;
 }
 
-export function AddItemDialog({ onAdd }: Props) {
+export function AddItemDialog({ onAdd, priorityCount }: Props) {
   const { visibleCategories } = useCategories();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -28,6 +29,7 @@ export function AddItemDialog({ onAdd }: Props) {
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
+  const [priority, setPriority] = useState(false);
 
   const reset = () => {
     setName("");
@@ -35,6 +37,7 @@ export function AddItemDialog({ onAdd }: Props) {
     setCost("");
     setUrl("");
     setNote("");
+    setPriority(false);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -46,10 +49,13 @@ export function AddItemDialog({ onAdd }: Props) {
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
       note: note.trim(),
+      priority,
     });
     reset();
     setOpen(false);
   };
+
+  const canSetPriority = priorityCount < 5;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -142,6 +148,36 @@ export function AddItemDialog({ onAdd }: Props) {
               rows={2}
             />
           </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (canSetPriority || priority) setPriority(!priority);
+            }}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-xl border p-3 transition-all",
+              priority
+                ? "border-amber-400 bg-amber-50 dark:bg-amber-500/10"
+                : canSetPriority
+                  ? "border-border bg-card hover:border-amber-400/50"
+                  : "border-border bg-muted opacity-50 cursor-not-allowed"
+            )}
+          >
+            <Star className={cn(
+              "h-5 w-5 transition-colors",
+              priority ? "text-amber-500 fill-amber-500" : "text-muted-foreground"
+            )} />
+            <div className="flex-1 text-left">
+              <p className={cn("text-sm font-medium", priority ? "text-amber-700 dark:text-amber-400" : "text-card-foreground")}>
+                Mark as priority
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {canSetPriority
+                  ? `${5 - priorityCount} priority slot${5 - priorityCount !== 1 ? "s" : ""} remaining`
+                  : "All 5 priority slots used"}
+              </p>
+            </div>
+          </button>
 
           <Button
             type="submit"

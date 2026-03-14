@@ -6,7 +6,9 @@ import { WishCard } from "@/components/WishCard";
 import { CategoryFilter } from "@/components/CategoryBadge";
 import { PrioritySwapDialog } from "@/components/PrioritySwapDialog";
 import { SortOption } from "@/lib/types";
-import { ArrowDownUp, Eye, EyeOff, Sparkles } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowDownUp, Eye, EyeOff, Search, Sparkles, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "newest", label: "Newest" },
@@ -21,34 +23,37 @@ const Index = () => {
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [showPurchased, setShowPurchased] = useState(false);
+  const [showOnlyPriority, setShowOnlyPriority] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [swapDialogOpen, setSwapDialogOpen] = useState(false);
   const [pendingPriorityId, setPendingPriorityId] = useState<string | null>(null);
+
+  const handleAddItem = (item: Parameters<typeof addItem>[0] & { priority?: boolean }) => {
+    addItem(item);
+  };
 
   const handlePriority = (id: string) => {
     const item = items.find((i) => i.id === id);
     if (!item) return;
 
-    // If already priority, just remove it
     if (item.priority) {
       togglePriority(id);
       return;
     }
 
-    // If under limit, just add
     if (priorityCount < 5) {
       togglePriority(id);
       return;
     }
 
-    // At limit — open swap dialog
     setPendingPriorityId(id);
     setSwapDialogOpen(true);
   };
 
   const handleSwap = (removeId: string) => {
-    togglePriority(removeId); // remove old
+    togglePriority(removeId);
     if (pendingPriorityId) {
-      togglePriority(pendingPriorityId); // add new
+      togglePriority(pendingPriorityId);
     }
     setSwapDialogOpen(false);
     setPendingPriorityId(null);
@@ -60,11 +65,19 @@ const Index = () => {
     let result = items.filter((item) => {
       if (filterCategory !== "All" && item.category !== filterCategory) return false;
       if (!showPurchased && item.purchased) return false;
+      if (showOnlyPriority && !item.priority) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        if (
+          !item.name.toLowerCase().includes(q) &&
+          !item.category.toLowerCase().includes(q) &&
+          !(item.note && item.note.toLowerCase().includes(q))
+        ) return false;
+      }
       return true;
     });
 
-    // Priority items first, then sort within each group
-    const sortFn = (a: typeof result[0], b: typeof result[0]) => {
+    result.sort((a, b) => {
       switch (sortBy) {
         case "newest":
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -79,13 +92,13 @@ const Index = () => {
         default:
           return 0;
       }
-    };
+    });
 
-    const priorities = result.filter((i) => i.priority && !i.purchased).sort(sortFn);
-    const rest = result.filter((i) => !(i.priority && !i.purchased)).sort(sortFn);
-
+    // Within the sorted list, float priorities to top (stable)
+    const priorities = result.filter((i) => i.priority && !i.purchased);
+    const rest = result.filter((i) => !(i.priority && !i.purchased));
     return [...priorities, ...rest];
-  }, [items, filterCategory, sortBy, showPurchased]);
+  }, [items, filterCategory, sortBy, showPurchased, showOnlyPriority, searchQuery]);
 
   const totalEstimated = filtered.reduce(
     (sum, item) => sum + (item.estimatedCost ?? 0),
@@ -102,11 +115,22 @@ const Index = () => {
             <Sparkles className="h-5 w-5 text-primary" />
             <h1 className="font-display text-xl font-bold text-foreground">Wish List</h1>
           </div>
-          <AddItemDialog onAdd={addItem} />
+          <AddItemDialog onAdd={handleAddItem} priorityCount={priorityCount} />
         </div>
       </header>
 
       <main className="mx-auto max-w-xl px-4 py-5 space-y-4">
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search wishes..."
+            className="rounded-xl h-10 pl-9"
+          />
+        </div>
+
         {items.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -135,8 +159,8 @@ const Index = () => {
         <CategoryFilter selected={filterCategory} onChange={setFilterCategory} />
 
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <ArrowDownUp className="h-3.5 w-3.5 text-muted-foreground" />
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <ArrowDownUp className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
             <div className="flex gap-1 overflow-x-auto">
               {SORT_OPTIONS.map((opt) => (
                 <button
@@ -153,14 +177,28 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <button
-            onClick={() => setShowPurchased(!showPurchased)}
-            className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
-            title={showPurchased ? "Hide purchased" : "Show purchased"}
-          >
-            {showPurchased ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-            {showPurchased ? "Hide" : "Show"} bought
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={() => setShowOnlyPriority(!showOnlyPriority)}
+              className={cn(
+                "flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium transition-colors",
+                showOnlyPriority
+                  ? "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400"
+                  : "text-muted-foreground hover:bg-muted"
+              )}
+              title={showOnlyPriority ? "Show all" : "Show priorities only"}
+            >
+              <Star className={cn("h-3.5 w-3.5", showOnlyPriority && "fill-amber-500")} />
+            </button>
+            <button
+              onClick={() => setShowPurchased(!showPurchased)}
+              className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+              title={showPurchased ? "Hide purchased" : "Show purchased"}
+            >
+              {showPurchased ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+              {showPurchased ? "Hide" : "Show"} bought
+            </button>
+          </div>
         </div>
 
         <div className="space-y-2.5 pb-20">
