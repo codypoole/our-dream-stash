@@ -51,5 +51,5 @@ export function useWishList() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  return { items, addItem, togglePurchased, deleteItem };
+  return { items, addItem, togglePurchased, deleteItem, togglePriority, priorityCount, getPriorityItems };
 }
