@@ -131,6 +131,18 @@ export function AddItemDialog({ onAdd }: Props) {
             </div>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="note" className="text-sm font-medium">Note (optional)</Label>
+            <Textarea
+              id="note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Any details or thoughts..."
+              className="rounded-xl min-h-[60px] resize-none"
+              rows={2}
+            />
+          </div>
+
           <Button
             type="submit"
             className="w-full rounded-xl h-11 text-sm font-semibold shadow-md shadow-primary/20"
