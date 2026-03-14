@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, Pencil, EyeOff, Eye, Sparkles } from "lucide-react";
 
-const EMOJI_OPTIONS = ["⚡", "🏠", "👗", "📚", "🍳", "✈️", "✨", "🎮", "💄", "🎁", "🏋️", "🎨", "🎵", "📱", "🛋️", "🧸"];
+
 
 export default function Categories() {
   const { categories, addCategory, editCategory, toggleHidden } = useCategories();
