@@ -25,7 +25,7 @@ interface Props {
 
 const MotionCard = motion.div;
 
-export function WishCard({ item, onToggle, onDelete, onPriority }: Props) {
+export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
