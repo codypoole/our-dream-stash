@@ -33,6 +33,7 @@ export function AddItemDialog({ onAdd }: Props) {
     setCategory("");
     setCost("");
     setUrl("");
+    setNote("");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
