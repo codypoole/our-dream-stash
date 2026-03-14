@@ -259,6 +259,7 @@ const Index = () => {
                   onToggle={togglePurchased}
                   onDelete={deleteItem}
                   onPriority={handlePriority}
+                  onOpen={(id) => setDetailItemId(id)}
                 />
               ))
             )}
