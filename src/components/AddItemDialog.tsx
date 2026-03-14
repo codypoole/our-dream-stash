@@ -26,6 +26,7 @@ export function AddItemDialog({ onAdd }: Props) {
   const [category, setCategory] = useState("");
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
+  const [note, setNote] = useState("");
 
   const reset = () => {
     setName("");
