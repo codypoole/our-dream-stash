@@ -4,6 +4,7 @@ import { useWishList } from "@/hooks/useWishList";
 import { AddItemDialog } from "@/components/AddItemDialog";
 import { WishCard } from "@/components/WishCard";
 import { CategoryFilter } from "@/components/CategoryBadge";
+import { PrioritySwapDialog } from "@/components/PrioritySwapDialog";
 import { SortOption } from "@/lib/types";
 import { ArrowDownUp, Eye, EyeOff, Sparkles } from "lucide-react";
 
@@ -16,10 +17,44 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ];
 
 const Index = () => {
-  const { items, addItem, togglePurchased, deleteItem } = useWishList();
+  const { items, addItem, togglePurchased, deleteItem, togglePriority, priorityCount, getPriorityItems } = useWishList();
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [showPurchased, setShowPurchased] = useState(false);
+  const [swapDialogOpen, setSwapDialogOpen] = useState(false);
+  const [pendingPriorityId, setPendingPriorityId] = useState<string | null>(null);
+
+  const handlePriority = (id: string) => {
+    const item = items.find((i) => i.id === id);
+    if (!item) return;
+
+    // If already priority, just remove it
+    if (item.priority) {
+      togglePriority(id);
+      return;
+    }
+
+    // If under limit, just add
+    if (priorityCount < 5) {
+      togglePriority(id);
+      return;
+    }
+
+    // At limit — open swap dialog
+    setPendingPriorityId(id);
+    setSwapDialogOpen(true);
+  };
+
+  const handleSwap = (removeId: string) => {
+    togglePriority(removeId); // remove old
+    if (pendingPriorityId) {
+      togglePriority(pendingPriorityId); // add new
+    }
+    setSwapDialogOpen(false);
+    setPendingPriorityId(null);
+  };
+
+  const pendingItem = items.find((i) => i.id === pendingPriorityId);
 
   const filtered = useMemo(() => {
     let result = items.filter((item) => {
@@ -28,24 +63,28 @@ const Index = () => {
       return true;
     });
 
-    switch (sortBy) {
-      case "newest":
-        result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        break;
-      case "oldest":
-        result.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-        break;
-      case "price-high":
-        result.sort((a, b) => (b.estimatedCost ?? 0) - (a.estimatedCost ?? 0));
-        break;
-      case "price-low":
-        result.sort((a, b) => (a.estimatedCost ?? 0) - (b.estimatedCost ?? 0));
-        break;
-      case "name":
-        result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-    }
-    return result;
+    // Priority items first, then sort within each group
+    const sortFn = (a: typeof result[0], b: typeof result[0]) => {
+      switch (sortBy) {
+        case "newest":
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "oldest":
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        case "price-high":
+          return (b.estimatedCost ?? 0) - (a.estimatedCost ?? 0);
+        case "price-low":
+          return (a.estimatedCost ?? 0) - (b.estimatedCost ?? 0);
+        case "name":
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    };
+
+    const priorities = result.filter((i) => i.priority && !i.purchased).sort(sortFn);
+    const rest = result.filter((i) => !(i.priority && !i.purchased)).sort(sortFn);
+
+    return [...priorities, ...rest];
   }, [items, filterCategory, sortBy, showPurchased]);
 
   const totalEstimated = filtered.reduce(
@@ -57,7 +96,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
@@ -69,7 +107,6 @@ const Index = () => {
       </header>
 
       <main className="mx-auto max-w-xl px-4 py-5 space-y-4">
-        {/* Stats bar */}
         {items.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -95,10 +132,8 @@ const Index = () => {
           </motion.div>
         )}
 
-        {/* Category filter */}
         <CategoryFilter selected={filterCategory} onChange={setFilterCategory} />
 
-        {/* Sort & toggle row */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
             <ArrowDownUp className="h-3.5 w-3.5 text-muted-foreground" />
@@ -128,7 +163,6 @@ const Index = () => {
           </button>
         </div>
 
-        {/* Items list */}
         <div className="space-y-2.5 pb-20">
           <AnimatePresence mode="popLayout">
             {filtered.length === 0 ? (
@@ -144,7 +178,7 @@ const Index = () => {
                 </p>
                 <p className="text-sm text-muted-foreground max-w-[240px]">
                   {items.length === 0
-                    ? "Tap \"Add Wish\" to add your first item to the list."
+                    ? 'Tap "Add Wish" to add your first item to the list.'
                     : "Try changing your filters to see more items."}
                 </p>
               </motion.div>
@@ -155,12 +189,21 @@ const Index = () => {
                   item={item}
                   onToggle={togglePurchased}
                   onDelete={deleteItem}
+                  onPriority={handlePriority}
                 />
               ))
             )}
           </AnimatePresence>
         </div>
       </main>
+
+      <PrioritySwapDialog
+        open={swapDialogOpen}
+        onOpenChange={setSwapDialogOpen}
+        priorityItems={getPriorityItems()}
+        newItemName={pendingItem?.name ?? ""}
+        onSwap={handleSwap}
+      />
     </div>
   );
 };
