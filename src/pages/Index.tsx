@@ -5,6 +5,7 @@ import { AddItemDialog } from "@/components/AddItemDialog";
 import { WishCard } from "@/components/WishCard";
 import { CategoryFilter } from "@/components/CategoryBadge";
 import { PrioritySwapDialog } from "@/components/PrioritySwapDialog";
+import { WishDetailDrawer } from "@/components/WishDetailDrawer";
 import { SortOption } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { ArrowDownUp, Eye, EyeOff, Filter, Search, Sparkles, Star } from "lucide-react";
