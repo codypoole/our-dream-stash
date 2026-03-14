@@ -282,6 +282,7 @@ const Index = () => {
         onToggle={togglePurchased}
         onDelete={deleteItem}
         onPriority={handlePriority}
+        onEdit={editItem}
       />
     </div>
   );
