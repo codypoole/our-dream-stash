@@ -29,6 +29,7 @@ const Index = () => {
   const [swapDialogOpen, setSwapDialogOpen] = useState(false);
   const [pendingPriorityId, setPendingPriorityId] = useState<string | null>(null);
   const [showControls, setShowControls] = useState(false);
+  const [detailItemId, setDetailItemId] = useState<string | null>(null);
 
   const handleAddItem = (item: Parameters<typeof addItem>[0] & { priority?: boolean }) => {
     addItem(item);
