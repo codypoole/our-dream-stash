@@ -157,27 +157,20 @@ const Index = () => {
           </motion.div>
         )}
 
-        <CategoryFilter selected={filterCategory} onChange={setFilterCategory} />
-
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 min-w-0 flex-1">
-            <ArrowDownUp className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-            <div className="flex gap-1 overflow-x-auto">
-              {SORT_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setSortBy(opt.value)}
-                  className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
-                    sortBy === opt.value
-                      ? "bg-foreground text-background"
-                      : "text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Toggle for filters/sort */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setShowControls(!showControls)}
+            className={cn(
+              "flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors",
+              showControls
+                ? "bg-foreground text-background"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            )}
+          >
+            <Filter className="h-3.5 w-3.5" />
+            Filters & Sort
+          </button>
           <div className="flex items-center gap-1 shrink-0">
             <button
               onClick={() => setShowOnlyPriority(!showOnlyPriority)}
@@ -201,6 +194,41 @@ const Index = () => {
             </button>
           </div>
         </div>
+
+        <AnimatePresence>
+          {showControls && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden space-y-3"
+            >
+              {/* Filters row */}
+              <CategoryFilter selected={filterCategory} onChange={setFilterCategory} />
+
+              {/* Sort row */}
+              <div className="flex items-center gap-1.5">
+                <ArrowDownUp className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                <div className="flex gap-1 overflow-x-auto">
+                  {SORT_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setSortBy(opt.value)}
+                      className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
+                        sortBy === opt.value
+                          ? "bg-foreground text-background"
+                          : "text-muted-foreground hover:bg-muted"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="space-y-2.5 pb-20">
           <AnimatePresence mode="popLayout">
