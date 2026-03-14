@@ -128,10 +128,9 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
               <Label htmlFor="url" className="text-sm font-medium">Link</Label>
               <Input
                 id="url"
-                type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://..."
+                placeholder="amazon.com/..."
                 className="rounded-xl h-11"
               />
             </div>

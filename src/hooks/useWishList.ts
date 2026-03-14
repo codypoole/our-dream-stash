@@ -51,5 +51,11 @@ export function useWishList() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  return { items, addItem, togglePurchased, deleteItem, togglePriority, priorityCount, getPriorityItems };
+  const editItem = (id: string, updates: Partial<Omit<WishItem, "id" | "createdAt">>) => {
+    setItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+    );
+  };
+
+  return { items, addItem, togglePurchased, deleteItem, editItem, togglePriority, priorityCount, getPriorityItems };
 }

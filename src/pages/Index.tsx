@@ -20,7 +20,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ];
 
 const Index = () => {
-  const { items, addItem, togglePurchased, deleteItem, togglePriority, priorityCount, getPriorityItems } = useWishList();
+  const { items, addItem, togglePurchased, deleteItem, editItem, togglePriority, priorityCount, getPriorityItems } = useWishList();
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [showPurchased, setShowPurchased] = useState(false);
@@ -282,6 +282,7 @@ const Index = () => {
         onToggle={togglePurchased}
         onDelete={deleteItem}
         onPriority={handlePriority}
+        onEdit={editItem}
       />
     </div>
   );

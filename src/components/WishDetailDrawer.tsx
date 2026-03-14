@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
 import { WishItem } from "@/lib/types";
 import { CategoryBadge } from "./CategoryBadge";
 import { cn } from "@/lib/utils";
+import { normalizeUrl } from "@/lib/urlUtils";
+import { useCategories } from "@/hooks/useCategories";
 import {
   Drawer,
   DrawerContent,
@@ -8,7 +11,13 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Check, ExternalLink, Star, Trash2, Calendar, DollarSign, Link2, StickyNote } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Check, ExternalLink, Star, Trash2, Calendar,
+  DollarSign, Link2, StickyNote, Pencil, X,
+} from "lucide-react";
 
 interface Props {
   item: WishItem | null;
@@ -17,9 +26,30 @@ interface Props {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onPriority: (id: string) => void;
+  onEdit: (id: string, updates: Partial<Omit<WishItem, "id" | "createdAt">>) => void;
 }
 
-export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete, onPriority }: Props) {
+export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete, onPriority, onEdit }: Props) {
+  const { visibleCategories } = useCategories();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [cost, setCost] = useState("");
+  const [url, setUrl] = useState("");
+  const [note, setNote] = useState("");
+
+  // Sync form state when item changes
+  useEffect(() => {
+    if (item) {
+      setName(item.name);
+      setCategory(item.category);
+      setCost(item.estimatedCost != null ? String(item.estimatedCost) : "");
+      setUrl(item.url);
+      setNote(item.note || "");
+      setEditing(false);
+    }
+  }, [item?.id, open]);
+
   if (!item) return null;
 
   const createdDate = new Date(item.createdAt).toLocaleDateString("en-US", {
@@ -28,110 +58,228 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
     year: "numeric",
   });
 
+  const handleSave = () => {
+    if (!name.trim() || !category) return;
+    onEdit(item.id, {
+      name: name.trim(),
+      category,
+      estimatedCost: cost ? parseFloat(cost) : null,
+      url: url.trim(),
+      note: note.trim(),
+    });
+    setEditing(false);
+  };
+
+  const displayUrl = item.url ? normalizeUrl(item.url) : "";
+
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <Drawer open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) setEditing(false); }}>
       <DrawerContent className="rounded-t-3xl">
         <div className="mx-auto w-full max-w-md px-6 pb-8">
           <DrawerHeader className="px-0 pt-4 pb-2">
-            <div className="flex items-center gap-2 mb-1">
-              <CategoryBadge category={item.category} />
-              {item.priority && !item.purchased && (
-                <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-              )}
-              {item.purchased && (
-                <span className="rounded-full bg-purchased px-2.5 py-0.5 text-xs font-semibold text-purchased-foreground">
-                  Purchased 🎊
-                </span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {!editing && <CategoryBadge category={item.category} />}
+                {item.priority && !item.purchased && (
+                  <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+                )}
+                {item.purchased && (
+                  <span className="rounded-full bg-purchased px-2.5 py-0.5 text-xs font-semibold text-purchased-foreground">
+                    Purchased 🎊
+                  </span>
+                )}
+              </div>
+              {!editing ? (
+                <button
+                  onClick={() => setEditing(true)}
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setEditing(false);
+                    // Reset to original values
+                    setName(item.name);
+                    setCategory(item.category);
+                    setCost(item.estimatedCost != null ? String(item.estimatedCost) : "");
+                    setUrl(item.url);
+                    setNote(item.note || "");
+                  }}
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               )}
             </div>
-            <DrawerTitle className={cn(
-              "font-display text-2xl text-left",
-              item.purchased && "line-through opacity-60"
-            )}>
-              {item.name}
-            </DrawerTitle>
+            {!editing && (
+              <DrawerTitle className={cn(
+                "font-display text-2xl text-left",
+                item.purchased && "line-through opacity-60"
+              )}>
+                {item.name}
+              </DrawerTitle>
+            )}
           </DrawerHeader>
 
-          <div className="space-y-4 pt-2">
-            {/* Cost */}
-            {item.estimatedCost != null && (
-              <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
-                <DollarSign className="h-4 w-4 text-muted-foreground shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Estimated cost</p>
-                  <p className="text-lg font-bold text-foreground">${item.estimatedCost.toFixed(2)}</p>
+          {editing ? (
+            /* ---- Edit Mode ---- */
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">What do you want?</Label>
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="rounded-xl h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Category</Label>
+                <div className="flex flex-wrap gap-2">
+                  {visibleCategories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setCategory(cat.name)}
+                      className={cn(
+                        "rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 border",
+                        category === cat.name
+                          ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105"
+                          : "bg-card text-muted-foreground border-border hover:border-primary/30"
+                      )}
+                    >
+                      {cat.emoji} {cat.name}
+                    </button>
+                  ))}
                 </div>
               </div>
-            )}
 
-            {/* Note */}
-            {item.note && (
-              <div className="flex items-start gap-3 rounded-xl bg-muted/50 p-3">
-                <StickyNote className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Note</p>
-                  <p className="text-sm text-foreground whitespace-pre-wrap">{item.note}</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Estimated cost</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={cost}
+                      onChange={(e) => setCost(e.target.value)}
+                      placeholder="0.00"
+                      className="rounded-xl h-11 pl-7"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Link</Label>
+                  <Input
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder="amazon.com/..."
+                    className="rounded-xl h-11"
+                  />
                 </div>
               </div>
-            )}
 
-            {/* Link */}
-            {item.url && (
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition-colors hover:bg-muted"
-              >
-                <Link2 className="h-4 w-4 text-primary shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs text-muted-foreground">Link</p>
-                  <p className="text-sm text-primary truncate">{item.url}</p>
-                </div>
-                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-              </a>
-            )}
-
-            {/* Date */}
-            <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
-              <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
-              <div>
-                <p className="text-xs text-muted-foreground">Added on</p>
-                <p className="text-sm text-foreground">{createdDate}</p>
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Note (optional)</Label>
+                <Textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Any details or thoughts..."
+                  className="rounded-xl min-h-[60px] resize-none"
+                  rows={2}
+                />
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className="flex gap-2 pt-2">
               <Button
-                onClick={() => { onToggle(item.id); onOpenChange(false); }}
-                variant={item.purchased ? "outline" : "default"}
-                className="flex-1 rounded-xl h-11 text-sm font-semibold"
+                onClick={handleSave}
+                className="w-full rounded-xl h-11 text-sm font-semibold shadow-md shadow-primary/20"
+                disabled={!name.trim() || !category}
               >
-                <Check className="h-4 w-4 mr-1.5" />
-                {item.purchased ? "Unmark purchased" : "Mark as purchased"}
+                Save changes ✨
               </Button>
-              {!item.purchased && (
-                <Button
-                  onClick={() => { onPriority(item.id); }}
-                  variant="outline"
-                  className={cn(
-                    "rounded-xl h-11 px-3",
-                    item.priority && "border-amber-400 text-amber-600"
-                  )}
-                >
-                  <Star className={cn("h-4 w-4", item.priority && "fill-amber-500 text-amber-500")} />
-                </Button>
+            </div>
+          ) : (
+            /* ---- View Mode ---- */
+            <div className="space-y-4 pt-2">
+              {item.estimatedCost != null && (
+                <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+                  <DollarSign className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Estimated cost</p>
+                    <p className="text-lg font-bold text-foreground">${item.estimatedCost.toFixed(2)}</p>
+                  </div>
+                </div>
               )}
-              <Button
-                onClick={() => { onDelete(item.id); onOpenChange(false); }}
-                variant="outline"
-                className="rounded-xl h-11 px-3 text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+
+              {item.note && (
+                <div className="flex items-start gap-3 rounded-xl bg-muted/50 p-3">
+                  <StickyNote className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Note</p>
+                    <p className="text-sm text-foreground whitespace-pre-wrap">{item.note}</p>
+                  </div>
+                </div>
+              )}
+
+              {item.url && (
+                <a
+                  href={displayUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition-colors hover:bg-muted"
+                >
+                  <Link2 className="h-4 w-4 text-primary shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs text-muted-foreground">Link</p>
+                    <p className="text-sm text-primary truncate">{item.url}</p>
+                  </div>
+                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                </a>
+              )}
+
+              <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+                <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Added on</p>
+                  <p className="text-sm text-foreground">{createdDate}</p>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <Button
+                  onClick={() => { onToggle(item.id); onOpenChange(false); }}
+                  variant={item.purchased ? "outline" : "default"}
+                  className="flex-1 rounded-xl h-11 text-sm font-semibold"
+                >
+                  <Check className="h-4 w-4 mr-1.5" />
+                  {item.purchased ? "Unmark" : "Purchased"}
+                </Button>
+                {!item.purchased && (
+                  <Button
+                    onClick={() => onPriority(item.id)}
+                    variant="outline"
+                    className={cn(
+                      "rounded-xl h-11 px-3",
+                      item.priority && "border-amber-400 text-amber-600"
+                    )}
+                  >
+                    <Star className={cn("h-4 w-4", item.priority && "fill-amber-500 text-amber-500")} />
+                  </Button>
+                )}
+                <Button
+                  onClick={() => { onDelete(item.id); onOpenChange(false); }}
+                  variant="outline"
+                  className="rounded-xl h-11 px-3 text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </DrawerContent>
     </Drawer>
