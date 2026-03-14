@@ -20,6 +20,7 @@ interface Props {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onPriority: (id: string) => void;
+  onOpen: (id: string) => void;
 }
 
 const MotionCard = motion.div;
