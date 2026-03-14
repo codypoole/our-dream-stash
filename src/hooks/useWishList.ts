@@ -13,14 +13,14 @@ export function useWishList() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [items]);
 
-  const addItem = (item: Omit<WishItem, "id" | "purchased" | "priority" | "createdAt">) => {
+  const addItem = (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => {
     setItems((prev) => [
       {
         ...item,
         note: item.note ?? "",
+        priority: item.priority ?? false,
         id: crypto.randomUUID(),
         purchased: false,
-        priority: false,
         createdAt: new Date().toISOString(),
       },
       ...prev,
