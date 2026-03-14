@@ -274,6 +274,15 @@ const Index = () => {
         newItemName={pendingItem?.name ?? ""}
         onSwap={handleSwap}
       />
+
+      <WishDetailDrawer
+        item={items.find((i) => i.id === detailItemId) ?? null}
+        open={!!detailItemId}
+        onOpenChange={(open) => { if (!open) setDetailItemId(null); }}
+        onToggle={togglePurchased}
+        onDelete={deleteItem}
+        onPriority={handlePriority}
+      />
     </div>
   );
 };
