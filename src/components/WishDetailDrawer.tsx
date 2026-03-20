@@ -4,6 +4,7 @@ import { CategoryBadge } from "./CategoryBadge";
 import { cn } from "@/lib/utils";
 import { normalizeUrl } from "@/lib/urlUtils";
 import { useCategories } from "@/hooks/useCategories";
+import { ImagePicker } from "@/components/ImagePicker";
 import {
   Drawer,
   DrawerContent,
