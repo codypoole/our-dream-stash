@@ -48,6 +48,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
       setCost(item.estimatedCost != null ? String(item.estimatedCost) : "");
       setUrl(item.url);
       setNote(item.note || "");
+      setImage(item.image || "");
       setEditing(false);
     }
   }, [item?.id, open]);
