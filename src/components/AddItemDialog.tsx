@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
+import { ImagePicker } from "@/components/ImagePicker";
 
 interface Props {
   onAdd: (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => void;
