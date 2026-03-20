@@ -39,6 +39,7 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
     setCost("");
     setUrl("");
     setNote("");
+    setImage("");
     setPriority(false);
   };
 
