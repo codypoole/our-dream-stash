@@ -30,6 +30,7 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
+  const [image, setImage] = useState("");
   const [priority, setPriority] = useState(false);
 
   const reset = () => {
