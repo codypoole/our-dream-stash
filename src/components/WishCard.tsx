@@ -88,6 +88,16 @@ export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props
             )}
           </button>
 
+          {item.image && (
+            <button
+              type="button"
+              onClick={() => onOpen(item.id)}
+              className="shrink-0 rounded-xl overflow-hidden border bg-muted"
+            >
+              <img src={item.image} alt={item.name} className="h-14 w-14 object-cover" />
+            </button>
+          )}
+
           <div className="flex flex-col items-center gap-1">
             {!item.purchased && (
               <motion.button

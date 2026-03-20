@@ -110,7 +110,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
                     setCost(item.estimatedCost != null ? String(item.estimatedCost) : "");
                     setUrl(item.url);
                     setNote(item.note || "");
-                  }}
+                    setImage(item.image || "");
                   className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                 >
                   <X className="h-4 w-4" />
