@@ -52,6 +52,7 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
       note: note.trim(),
+      image,
       priority,
     });
     reset();
