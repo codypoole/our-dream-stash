@@ -38,6 +38,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
+  const [image, setImage] = useState("");
 
   // Sync form state when item changes
   useEffect(() => {
