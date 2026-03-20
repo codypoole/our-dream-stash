@@ -152,6 +152,11 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
             />
           </div>
 
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Photo (optional)</Label>
+            <ImagePicker value={image} onChange={setImage} />
+          </div>
+
           <button
             type="button"
             onClick={() => {

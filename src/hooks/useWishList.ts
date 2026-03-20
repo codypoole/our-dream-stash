@@ -18,6 +18,7 @@ export function useWishList() {
       {
         ...item,
         note: item.note ?? "",
+        image: item.image ?? "",
         priority: item.priority ?? false,
         id: crypto.randomUUID(),
         purchased: false,
