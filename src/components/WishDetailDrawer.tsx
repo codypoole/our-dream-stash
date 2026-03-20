@@ -199,6 +199,11 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Photo (optional)</Label>
+                <ImagePicker value={image} onChange={setImage} />
+              </div>
+
               <Button
                 onClick={handleSave}
                 className="w-full rounded-xl h-11 text-sm font-semibold shadow-md shadow-primary/20"
@@ -210,6 +215,11 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
           ) : (
             /* ---- View Mode ---- */
             <div className="space-y-4 pt-2">
+              {item.image && (
+                <div className="rounded-xl overflow-hidden border bg-muted">
+                  <img src={item.image} alt={item.name} className="w-full max-h-48 object-cover" />
+                </div>
+              )}
               {item.estimatedCost != null && (
                 <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
                   <DollarSign className="h-4 w-4 text-muted-foreground shrink-0" />
