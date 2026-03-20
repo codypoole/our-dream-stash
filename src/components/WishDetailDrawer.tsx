@@ -69,6 +69,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
       note: note.trim(),
+      image,
     });
     setEditing(false);
   };
