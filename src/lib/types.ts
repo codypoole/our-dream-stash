@@ -5,6 +5,7 @@ export interface WishItem {
   estimatedCost: number | null;
   url: string;
   note: string;
+  image: string;
   purchased: boolean;
   priority: boolean;
   createdAt: string;
