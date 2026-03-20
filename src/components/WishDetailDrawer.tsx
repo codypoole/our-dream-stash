@@ -4,6 +4,7 @@ import { CategoryBadge } from "./CategoryBadge";
 import { cn } from "@/lib/utils";
 import { normalizeUrl } from "@/lib/urlUtils";
 import { useCategories } from "@/hooks/useCategories";
+import { ImagePicker } from "@/components/ImagePicker";
 import {
   Drawer,
   DrawerContent,
@@ -37,6 +38,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
+  const [image, setImage] = useState("");
 
   // Sync form state when item changes
   useEffect(() => {
@@ -46,6 +48,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
       setCost(item.estimatedCost != null ? String(item.estimatedCost) : "");
       setUrl(item.url);
       setNote(item.note || "");
+      setImage(item.image || "");
       setEditing(false);
     }
   }, [item?.id, open]);
@@ -66,6 +69,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
       note: note.trim(),
+      image,
     });
     setEditing(false);
   };
@@ -106,6 +110,7 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
                     setCost(item.estimatedCost != null ? String(item.estimatedCost) : "");
                     setUrl(item.url);
                     setNote(item.note || "");
+                    setImage(item.image || "");
                   }}
                   className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                 >
@@ -194,6 +199,11 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Photo (optional)</Label>
+                <ImagePicker value={image} onChange={setImage} />
+              </div>
+
               <Button
                 onClick={handleSave}
                 className="w-full rounded-xl h-11 text-sm font-semibold shadow-md shadow-primary/20"
@@ -205,6 +215,11 @@ export function WishDetailDrawer({ item, open, onOpenChange, onToggle, onDelete,
           ) : (
             /* ---- View Mode ---- */
             <div className="space-y-4 pt-2">
+              {item.image && (
+                <div className="rounded-xl overflow-hidden border bg-muted">
+                  <img src={item.image} alt={item.name} className="w-full max-h-48 object-cover" />
+                </div>
+              )}
               {item.estimatedCost != null && (
                 <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
                   <DollarSign className="h-4 w-4 text-muted-foreground shrink-0" />

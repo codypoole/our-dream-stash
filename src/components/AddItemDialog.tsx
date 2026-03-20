@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { WishItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
+import { ImagePicker } from "@/components/ImagePicker";
 
 interface Props {
   onAdd: (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => void;
@@ -29,6 +30,7 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
   const [cost, setCost] = useState("");
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
+  const [image, setImage] = useState("");
   const [priority, setPriority] = useState(false);
 
   const reset = () => {
@@ -37,6 +39,7 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
     setCost("");
     setUrl("");
     setNote("");
+    setImage("");
     setPriority(false);
   };
 
@@ -49,6 +52,7 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
       estimatedCost: cost ? parseFloat(cost) : null,
       url: url.trim(),
       note: note.trim(),
+      image,
       priority,
     });
     reset();
@@ -146,6 +150,11 @@ export function AddItemDialog({ onAdd, priorityCount }: Props) {
               className="rounded-xl min-h-[60px] resize-none"
               rows={2}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Photo (optional)</Label>
+            <ImagePicker value={image} onChange={setImage} />
           </div>
 
           <button
