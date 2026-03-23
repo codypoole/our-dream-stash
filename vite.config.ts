@@ -6,7 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const base = mode === "production" ? "/our-wish-list/" : "/";
+  const base = mode === "production" ? "/our-dream-stash/" : "/";
   return {
   base,
   server: {
