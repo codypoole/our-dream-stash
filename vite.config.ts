@@ -58,4 +58,5 @@ export default defineConfig(({ mode }) => {
     include: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@radix-ui/react-tooltip"],
     force: true,
   },
-}));
+};
+});
