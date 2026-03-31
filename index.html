@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Our Wish List</title>
+    <meta name="description" content="A shared family wish list to track what you want and what you've bought." />
+    <meta name="theme-color" content="#cc6633" />
+    <link rel="apple-touch-icon" href="/our-dream-stash/pwa-192.png" />
+    <meta property="og:title" content="Our Wish List" />
+    <meta property="og:description" content="A shared family wish list" />
+    <meta property="og:type" content="website" />
+    <script type="module" crossorigin src="/our-dream-stash/assets/index-C5ItHa_x.js"></script>
+    <link rel="stylesheet" crossorigin href="/our-dream-stash/assets/index-B6rPkbLE.css">
+  <link rel="manifest" href="/our-dream-stash/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/our-dream-stash/registerSW.js"></script></head>
+  <body>
+    <script>
+      // GitHub Pages SPA redirect handler
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+    <div id="root"></div>
+  </body>
+</html>
