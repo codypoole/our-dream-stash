@@ -111,28 +111,31 @@ const Index = () => {
   const purchasedCount = items.filter((i) => i.purchased).length;
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-10 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+    <div className="min-h-screen bg-background relative">
+      <header className="sticky top-0 z-10 border-b border-border/40 bg-background/85 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-xl items-center justify-between px-5 py-3.5">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10">
-              <Sparkles className="h-4 w-4 text-primary" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
+              <Sparkles className="h-[18px] w-[18px] text-primary" />
             </div>
-            <h1 className="font-display text-xl font-extrabold tracking-tight text-foreground">Wish List</h1>
+            <div>
+              <p className="font-display text-[9px] font-semibold italic tracking-[0.22em] text-muted-foreground uppercase leading-none mb-0.5">our</p>
+              <h1 className="font-display text-[1.1rem] font-bold text-foreground leading-none tracking-tight">Dream Stash</h1>
+            </div>
           </div>
           <AddItemDialog onAdd={handleAddItem} priorityCount={priorityCount} />
         </div>
       </header>
 
-      <main className="mx-auto max-w-xl px-5 py-5 space-y-4">
+      <main className="mx-auto max-w-xl px-5 py-5 space-y-4 relative z-[1]">
         {/* Search */}
         <div className="relative group">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search wishes..."
-            className="rounded-2xl h-11 pl-10 bg-card/80 border-border/60 shadow-sm shadow-black/[0.03] transition-shadow focus:shadow-md focus:shadow-primary/[0.06]"
+            placeholder="Search your stash..."
+            className="rounded-2xl h-11 pl-10 bg-card/70 border-border/50 shadow-sm shadow-black/20 transition-shadow focus:shadow-md focus:shadow-primary/[0.1] placeholder:text-muted-foreground/60"
           />
         </div>
 
@@ -141,23 +144,23 @@ const Index = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="flex items-center gap-3 rounded-2xl bg-card border border-border/60 p-4 shadow-sm shadow-black/[0.03]"
+            className="flex items-stretch rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden shadow-md shadow-black/20"
           >
-            <div className="flex-1 text-center">
-              <p className="font-display text-2xl font-extrabold text-foreground">{items.length - purchasedCount}</p>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mt-0.5">Wishes</p>
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-3">
+              <p className="font-display text-[2rem] font-bold text-foreground leading-none">{items.length - purchasedCount}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1.5">Wishes</p>
             </div>
-            <div className="h-10 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
-            <div className="flex-1 text-center">
-              <p className="font-display text-2xl font-extrabold text-purchased">{purchasedCount}</p>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mt-0.5">Purchased</p>
+            <div className="w-px bg-border/50 my-3" />
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-3">
+              <p className="font-display text-[2rem] font-bold text-[hsl(var(--purchased))] leading-none">{purchasedCount}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1.5">Purchased</p>
             </div>
-            <div className="h-10 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
-            <div className="flex-1 text-center">
-              <p className="font-display text-2xl font-extrabold text-foreground">
+            <div className="w-px bg-border/50 my-3" />
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-3">
+              <p className="font-display text-[2rem] font-bold text-foreground leading-none">
                 ${totalEstimated > 999 ? `${(totalEstimated / 1000).toFixed(1)}k` : totalEstimated.toFixed(0)}
               </p>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mt-0.5">Estimated</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-1.5">Estimated</p>
             </div>
           </motion.div>
         )}
@@ -167,10 +170,10 @@ const Index = () => {
           <button
             onClick={() => setShowControls(!showControls)}
             className={cn(
-              "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all duration-200",
+              "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all duration-200",
               showControls
-                ? "bg-foreground text-background shadow-md shadow-foreground/10"
-                : "bg-card text-muted-foreground border border-border/60 hover:border-foreground/20 hover:text-foreground"
+                ? "bg-foreground text-background shadow-md shadow-black/20"
+                : "bg-card/70 text-muted-foreground border border-border/50 hover:border-border hover:text-foreground"
             )}
           >
             <Filter className="h-3.5 w-3.5" />
@@ -180,22 +183,22 @@ const Index = () => {
             <button
               onClick={() => setShowOnlyPriority(!showOnlyPriority)}
               className={cn(
-                "flex items-center gap-1 rounded-xl px-2.5 py-2 text-xs font-semibold transition-all duration-200",
+                "flex items-center gap-1 rounded-xl px-2.5 py-2 text-xs font-bold transition-all duration-200",
                 showOnlyPriority
-                  ? "bg-amber-50 text-amber-700 border border-amber-200 shadow-sm shadow-amber-500/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-card"
+                  ? "bg-[hsl(var(--priority)/0.12)] text-[hsl(var(--priority))] border border-[hsl(var(--priority)/0.35)]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-card/70"
               )}
               title={showOnlyPriority ? "Show all" : "Show priorities only"}
             >
-              <Star className={cn("h-3.5 w-3.5", showOnlyPriority && "fill-amber-500")} />
+              <Star className={cn("h-3.5 w-3.5", showOnlyPriority && "fill-[hsl(var(--priority))]")} />
             </button>
             <button
               onClick={() => setShowPurchased(!showPurchased)}
               className={cn(
-                "flex items-center gap-1 rounded-xl px-2.5 py-2 text-xs font-semibold transition-all duration-200",
+                "flex items-center gap-1 rounded-xl px-2.5 py-2 text-xs font-bold transition-all duration-200",
                 showPurchased
-                  ? "bg-card text-foreground border border-border/60"
-                  : "text-muted-foreground hover:text-foreground hover:bg-card"
+                  ? "bg-card/70 text-foreground border border-border/60"
+                  : "text-muted-foreground hover:text-foreground hover:bg-card/70"
               )}
               title={showPurchased ? "Hide purchased" : "Show purchased"}
             >
@@ -220,16 +223,16 @@ const Index = () => {
               {/* Sort row */}
               <div className="flex items-center gap-2">
                 <ArrowDownUp className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                <div className="flex gap-1.5 overflow-x-auto">
+                <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
                   {SORT_OPTIONS.map((opt) => (
                     <button
                       key={opt.value}
                       onClick={() => setSortBy(opt.value)}
                       className={cn(
-                        "shrink-0 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all duration-200",
+                        "shrink-0 rounded-xl px-3 py-1.5 text-xs font-bold transition-all duration-200",
                         sortBy === opt.value
-                          ? "bg-foreground text-background shadow-md shadow-foreground/10"
-                          : "text-muted-foreground hover:text-foreground hover:bg-card border border-transparent hover:border-border/60"
+                          ? "bg-foreground text-background shadow-md shadow-black/20"
+                          : "text-muted-foreground hover:text-foreground hover:bg-card/70 border border-transparent hover:border-border/50"
                       )}
                     >
                       {opt.label}
@@ -241,7 +244,7 @@ const Index = () => {
           )}
         </AnimatePresence>
 
-        <div className="space-y-2.5 pb-20">
+        <div className="space-y-2.5 pb-32">
           <AnimatePresence mode="popLayout">
             {filtered.length === 0 ? (
               <motion.div
@@ -251,7 +254,7 @@ const Index = () => {
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="flex flex-col items-center justify-center py-20 text-center"
               >
-                <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 ring-1 ring-primary/20">
                   <span className="text-3xl">🌟</span>
                 </div>
                 <p className="font-display text-lg font-bold text-foreground mb-1.5">
@@ -259,7 +262,7 @@ const Index = () => {
                 </p>
                 <p className="text-sm text-muted-foreground max-w-[260px] leading-relaxed">
                   {items.length === 0
-                    ? 'Tap "Add Wish" to add your first item to the list.'
+                    ? 'Tap "Add Wish" to add your first item to the stash.'
                     : "Try changing your filters to see more items."}
                 </p>
               </motion.div>

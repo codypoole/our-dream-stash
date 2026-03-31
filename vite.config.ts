@@ -26,11 +26,11 @@ export default defineConfig(({ mode }) => {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
       },
       manifest: {
-        name: "Our Wish List",
-        short_name: "Wishes",
+        name: "Our Dream Stash",
+        short_name: "Stash",
         description: "A shared wish list for the family",
-        theme_color: "#cc6633",
-        background_color: "#f7f3ef",
+        theme_color: "#0e1018",
+        background_color: "#0e1018",
         display: "standalone",
         start_url: base,
         icons: [

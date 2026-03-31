@@ -9,8 +9,11 @@ const tabs = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-20 border-t border-border/40 bg-card/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-xl">
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-20 flex justify-center"
+      style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
+    >
+      <div className="flex items-center gap-1 rounded-full border border-border/70 bg-card/90 backdrop-blur-2xl p-1.5 shadow-2xl shadow-black/50">
         {tabs.map((tab) => (
           <NavLink
             key={tab.to}
@@ -18,22 +21,22 @@ export function BottomNav() {
             end
             className={({ isActive }) =>
               cn(
-                "flex flex-1 flex-col items-center gap-1 py-3 text-[11px] font-semibold uppercase tracking-wider transition-all duration-200",
+                "flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-300",
                 isActive
-                  ? "text-primary"
-                  : "text-muted-foreground/60 hover:text-foreground"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/40"
+                  : "text-muted-foreground hover:text-foreground"
               )
             }
           >
             {({ isActive }) => (
               <>
-                <div className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-200",
-                  isActive && "bg-primary/10"
-                )}>
-                  <tab.icon className={cn("h-[18px] w-[18px]", isActive && "fill-primary/20")} />
-                </div>
-                {tab.label}
+                <tab.icon
+                  className={cn(
+                    "h-[15px] w-[15px] transition-all duration-300",
+                    isActive && "fill-primary-foreground/30"
+                  )}
+                />
+                <span>{tab.label}</span>
               </>
             )}
           </NavLink>
