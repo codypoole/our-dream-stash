@@ -73,7 +73,7 @@ export function ImagePicker({ value, onChange, className }: Props) {
       />
 
       {value ? (
-        <div className="relative w-full rounded-xl overflow-hidden border bg-muted">
+        <div className="relative w-full rounded-2xl overflow-hidden border border-border/60 bg-muted shadow-sm">
           <img
             src={value}
             alt="Wish item"
@@ -82,14 +82,14 @@ export function ImagePicker({ value, onChange, className }: Props) {
           <button
             type="button"
             onClick={() => onChange("")}
-            className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-destructive transition-colors"
+            className="absolute top-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-destructive transition-all duration-200"
           >
             <X className="h-4 w-4" />
           </button>
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-200"
           >
             <Camera className="h-4 w-4" />
           </button>
@@ -100,7 +100,7 @@ export function ImagePicker({ value, onChange, className }: Props) {
           onClick={() => inputRef.current?.click()}
           disabled={loading}
           className={cn(
-            "flex w-full items-center justify-center gap-2 rounded-xl border border-dashed p-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground",
+            "flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border/80 p-5 text-sm font-semibold text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-foreground hover:bg-card/50",
             loading && "opacity-50 cursor-wait"
           )}
         >

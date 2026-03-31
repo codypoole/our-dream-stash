@@ -37,14 +37,14 @@ export function PrioritySwapDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) setSelectedId(null); }}>
-      <DialogContent className="sm:max-w-md rounded-2xl">
+      <DialogContent className="sm:max-w-md rounded-2xl border-border/60">
         <DialogHeader>
-          <DialogTitle className="font-display text-xl">
+          <DialogTitle className="font-display text-xl font-extrabold">
             Priority list full ⭐
           </DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-muted-foreground">
-          You can only have 5 priorities. To add <strong className="text-foreground">{newItemName}</strong>, remove one:
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          You can only have 5 priorities. To add <strong className="text-foreground font-semibold">{newItemName}</strong>, remove one:
         </p>
         <div className="space-y-2 py-2">
           {priorityItems.map((item) => (
@@ -53,21 +53,23 @@ export function PrioritySwapDialog({
               whileTap={{ scale: 0.97 }}
               onClick={() => setSelectedId(item.id)}
               className={cn(
-                "w-full flex items-center gap-3 rounded-xl border p-3 text-left transition-all",
+                "w-full flex items-center gap-3 rounded-xl border p-3.5 text-left transition-all duration-200",
                 selectedId === item.id
-                  ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                  : "border-border bg-card hover:border-primary/30"
+                  ? "border-primary bg-primary/5 ring-2 ring-primary/15 shadow-sm"
+                  : "border-border/60 bg-card hover:border-primary/30"
               )}
             >
-              <Star className="h-4 w-4 text-amber-500 fill-amber-500 shrink-0" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 shrink-0">
+                <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+              </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-card-foreground truncate">{item.name}</p>
+                <p className="font-semibold text-card-foreground truncate">{item.name}</p>
                 {item.estimatedCost != null && (
-                  <p className="text-xs text-muted-foreground">${item.estimatedCost.toFixed(2)}</p>
+                  <p className="text-xs text-muted-foreground font-medium">${item.estimatedCost.toFixed(2)}</p>
                 )}
               </div>
               {selectedId === item.id && (
-                <span className="text-xs font-medium text-primary">Remove</span>
+                <span className="text-xs font-bold text-primary uppercase tracking-wider">Remove</span>
               )}
             </motion.button>
           ))}
@@ -75,7 +77,7 @@ export function PrioritySwapDialog({
         <Button
           onClick={handleSwap}
           disabled={!selectedId}
-          className="w-full rounded-xl h-11 text-sm font-semibold shadow-md shadow-primary/20"
+          className="w-full rounded-xl h-12 text-sm font-bold shadow-lg shadow-primary/20"
         >
           Swap priority ⭐
         </Button>

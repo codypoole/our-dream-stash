@@ -2,66 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 40 30% 96%;
-    --foreground: 240 10% 12%;
+    --background: 38 40% 95%;
+    --foreground: 25 30% 12%;
 
-    --card: 40 25% 99%;
-    --card-foreground: 240 10% 12%;
+    --card: 36 35% 98%;
+    --card-foreground: 25 30% 12%;
 
-    --popover: 40 25% 99%;
-    --popover-foreground: 240 10% 12%;
+    --popover: 36 35% 98%;
+    --popover-foreground: 25 30% 12%;
 
-    --primary: 340 65% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 16 65% 48%;
+    --primary-foreground: 40 50% 97%;
 
-    --secondary: 45 80% 92%;
-    --secondary-foreground: 35 60% 30%;
+    --secondary: 38 45% 90%;
+    --secondary-foreground: 25 40% 28%;
 
-    --muted: 40 15% 92%;
-    --muted-foreground: 240 5% 45%;
+    --muted: 35 20% 91%;
+    --muted-foreground: 25 12% 50%;
 
-    --accent: 200 70% 92%;
-    --accent-foreground: 200 60% 25%;
+    --accent: 155 30% 88%;
+    --accent-foreground: 155 35% 22%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 4 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 340 65% 55%;
+    --border: 35 22% 85%;
+    --input: 35 22% 85%;
+    --ring: 16 65% 48%;
 
     --radius: 1rem;
 
-    --purchased: 155 55% 45%;
+    --purchased: 155 42% 42%;
     --purchased-foreground: 0 0% 100%;
 
-    --tag-electronics: 220 75% 92%;
-    --tag-electronics-fg: 220 60% 35%;
-    --tag-home: 35 80% 90%;
-    --tag-home-fg: 35 60% 30%;
-    --tag-clothing: 310 60% 92%;
-    --tag-clothing-fg: 310 45% 35%;
-    --tag-books: 150 50% 90%;
-    --tag-books-fg: 150 45% 28%;
-    --tag-kitchen: 20 75% 90%;
-    --tag-kitchen-fg: 20 60% 30%;
-    --tag-travel: 200 70% 90%;
-    --tag-travel-fg: 200 55% 28%;
-    --tag-other: 260 50% 92%;
-    --tag-other-fg: 260 40% 35%;
+    --tag-electronics: 220 55% 92%;
+    --tag-electronics-fg: 220 50% 32%;
+    --tag-home: 35 65% 88%;
+    --tag-home-fg: 35 50% 26%;
+    --tag-clothing: 320 45% 91%;
+    --tag-clothing-fg: 320 35% 32%;
+    --tag-books: 155 35% 88%;
+    --tag-books-fg: 155 35% 24%;
+    --tag-kitchen: 22 60% 88%;
+    --tag-kitchen-fg: 22 50% 28%;
+    --tag-travel: 200 50% 89%;
+    --tag-travel-fg: 200 45% 26%;
+    --tag-other: 270 35% 91%;
+    --tag-other-fg: 270 30% 32%;
 
-    --sidebar-background: 40 20% 95%;
-    --sidebar-foreground: 240 10% 25%;
-    --sidebar-primary: 340 65% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 15% 90%;
-    --sidebar-accent-foreground: 240 10% 25%;
-    --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 340 65% 55%;
+    --sidebar-background: 38 30% 94%;
+    --sidebar-foreground: 25 20% 22%;
+    --sidebar-primary: 16 65% 48%;
+    --sidebar-primary-foreground: 40 50% 97%;
+    --sidebar-accent: 38 20% 89%;
+    --sidebar-accent-foreground: 25 20% 22%;
+    --sidebar-border: 35 22% 85%;
+    --sidebar-ring: 16 65% 48%;
   }
 }
 
@@ -72,12 +72,54 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Bricolage Grotesque', Georgia, serif;
   }
+}
+
+/* Subtle grain texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(35 22% 78%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(35 22% 68%);
+}
+
+/* Smooth page transitions */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
