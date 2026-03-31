@@ -112,7 +112,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background relative">
-      <header className="sticky top-0 z-10 border-b border-border/40 bg-background/85 backdrop-blur-2xl">
+      <header className="sticky top-0 z-10 border-b border-border/40 bg-background/85 backdrop-blur-2xl" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="mx-auto flex max-w-xl items-center justify-between px-5 py-3.5">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
