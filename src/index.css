@@ -42,20 +42,7 @@
     --priority: 43 88% 60%;
     --priority-foreground: 30 30% 10%;
 
-    --tag-electronics: 222 48% 18%;
-    --tag-electronics-fg: 222 72% 75%;
-    --tag-home: 35 52% 18%;
-    --tag-home-fg: 35 72% 72%;
-    --tag-clothing: 322 38% 18%;
-    --tag-clothing-fg: 322 62% 78%;
-    --tag-books: 155 34% 16%;
-    --tag-books-fg: 155 52% 65%;
-    --tag-kitchen: 22 50% 18%;
-    --tag-kitchen-fg: 22 72% 70%;
-    --tag-travel: 200 42% 16%;
-    --tag-travel-fg: 200 62% 68%;
-    --tag-other: 270 28% 18%;
-    --tag-other-fg: 270 52% 72%;
+
 
     --sidebar-background: 233 30% 9%;
     --sidebar-foreground: 40 25% 75%;
