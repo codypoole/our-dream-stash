@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { Heart, Grid3X3 } from "lucide-react";
+import { Heart, Grid3X3, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { to: "/", icon: Heart, label: "Wishes" },
+  { to: "/gallery", icon: ImageIcon, label: "Gallery" },
   { to: "/categories", icon: Grid3X3, label: "Categories" },
 ];
 
