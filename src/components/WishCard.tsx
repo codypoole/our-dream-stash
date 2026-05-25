@@ -27,6 +27,7 @@ const MotionCard = motion.div;
 
 export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmPurchase, setConfirmPurchase] = useState(false);
 
   return (
     <>
@@ -59,7 +60,7 @@ export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props
         <div className="flex items-start gap-3">
           <motion.button
             whileTap={{ scale: 0.8 }}
-            onClick={() => onToggle(item.id)}
+            onClick={() => item.purchased ? onToggle(item.id) : setConfirmPurchase(true)}
             className={cn(
               "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200",
               item.purchased
@@ -132,6 +133,26 @@ export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props
           </div>
         </div>
       </MotionCard>
+
+      <AlertDialog open={confirmPurchase} onOpenChange={setConfirmPurchase}>
+        <AlertDialogContent className="rounded-2xl border-border/50 bg-card">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-display text-lg">Mark as purchased?</AlertDialogTitle>
+            <AlertDialogDescription className="text-muted-foreground">
+              Confirm that "{item.name}" has been purchased.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-xl border-border/50 bg-muted hover:bg-muted/80">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => onToggle(item.id)}
+              className="rounded-xl bg-[hsl(var(--purchased))] text-purchased-foreground hover:bg-[hsl(var(--purchased))]/90 shadow-md shadow-[hsl(var(--purchased))]/20"
+            >
+              Yes, purchased!
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent className="rounded-2xl border-border/50 bg-card">
