@@ -1,17 +1,9 @@
-import { useState, useEffect } from "react";
-import { Category, DEFAULT_CATEGORIES } from "@/lib/types";
-
-const STORAGE_KEY = "wish-list-categories";
+import { useState } from "react";
+import { Category } from "@/lib/types";
+import defaultCategories from "@/data/categories.json";
 
 export function useCategories() {
-  const [categories, setCategories] = useState<Category[]>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : DEFAULT_CATEGORIES;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
-  }, [categories]);
+  const [categories, setCategories] = useState<Category[]>(defaultCategories as Category[]);
 
   const visibleCategories = categories.filter((c) => !c.hidden);
 

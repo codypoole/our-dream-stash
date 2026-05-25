@@ -1,17 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { WishItem } from "@/lib/types";
-
-const STORAGE_KEY = "wish-list-items";
+import defaultWishes from "@/data/wishes.json";
 
 export function useWishList() {
-  const [items, setItems] = useState<WishItem[]>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+  const [items, setItems] = useState<WishItem[]>(defaultWishes as WishItem[]);
 
   const addItem = (item: Omit<WishItem, "id" | "purchased" | "createdAt">) => {
     setItems((prev) => [

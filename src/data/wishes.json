@@ -1,0 +1,14 @@
+[
+  {
+    "id": "fire-table-001",
+    "name": "Fire Table",
+    "category": "Pool",
+    "estimatedCost": 900,
+    "url": "",
+    "note": "",
+    "image": "",
+    "purchased": false,
+    "priority": false,
+    "createdAt": "2026-05-20T00:00:00.000Z"
+  }
+]
