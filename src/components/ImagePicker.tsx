@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Camera, X, ImagePlus, Images } from "lucide-react";
+import { useRef, useState, useCallback } from "react";
+import { Camera, X, ImagePlus, Images, ClipboardPaste } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -47,9 +47,7 @@ export function ImagePicker({ value, onChange, className }: Props) {
   const libraryRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const processFile = useCallback(async (file: File) => {
     setLoading(true);
     try {
       const compressed = await compressImage(file);
@@ -58,10 +56,34 @@ export function ImagePicker({ value, onChange, className }: Props) {
       console.error("Failed to process image");
     } finally {
       setLoading(false);
-      if (cameraRef.current) cameraRef.current.value = "";
-      if (libraryRef.current) libraryRef.current.value = "";
     }
+  }, [onChange]);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+    if (cameraRef.current) cameraRef.current.value = "";
+    if (libraryRef.current) libraryRef.current.value = "";
   };
+
+  const handlePaste = useCallback(async () => {
+    try {
+      const clipboardItems = await navigator.clipboard.read();
+      for (const item of clipboardItems) {
+        const imageType = item.types.find((t) => t.startsWith("image/"));
+        if (imageType) {
+          const blob = await item.getType(imageType);
+          const file = new File([blob], "pasted-image.png", { type: imageType });
+          await processFile(file);
+          return;
+        }
+      }
+      console.warn("No image found on clipboard");
+    } catch {
+      console.error("Failed to read clipboard");
+    }
+  }, [processFile]);
 
   return (
     <div className={cn("space-y-2", className)}>
@@ -100,6 +122,14 @@ export function ImagePicker({ value, onChange, className }: Props) {
           <div className="absolute bottom-2.5 right-2.5 flex gap-1.5">
             <button
               type="button"
+              onClick={handlePaste}
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-200"
+              title="Paste from clipboard"
+            >
+              <ClipboardPaste className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
               onClick={() => libraryRef.current?.click()}
               className="flex h-7 w-7 items-center justify-center rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-200"
               title="Choose from library"
@@ -117,7 +147,7 @@ export function ImagePicker({ value, onChange, className }: Props) {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => libraryRef.current?.click()}
@@ -140,7 +170,19 @@ export function ImagePicker({ value, onChange, className }: Props) {
             )}
           >
             <Camera className="h-5 w-5" />
-            {loading ? "Processing..." : "Camera"}
+            {loading ? "..." : "Camera"}
+          </button>
+          <button
+            type="button"
+            onClick={handlePaste}
+            disabled={loading}
+            className={cn(
+              "flex items-center justify-center gap-2 rounded-xl border border-dashed border-border/80 p-4 text-sm font-semibold text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-foreground hover:bg-card/50",
+              loading && "opacity-50 cursor-wait"
+            )}
+          >
+            <ClipboardPaste className="h-5 w-5" />
+            Paste
           </button>
         </div>
       )}

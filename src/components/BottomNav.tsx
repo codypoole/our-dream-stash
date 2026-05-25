@@ -22,23 +22,21 @@ export function BottomNav() {
             end
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-300",
+                "flex items-center justify-center rounded-full h-10 w-10 transition-all duration-300",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/40"
                   : "text-muted-foreground hover:text-foreground"
               )
             }
+            title={tab.label}
           >
             {({ isActive }) => (
-              <>
-                <tab.icon
-                  className={cn(
-                    "h-[15px] w-[15px] transition-all duration-300",
-                    isActive && "fill-primary-foreground/30"
-                  )}
-                />
-                <span>{tab.label}</span>
-              </>
+              <tab.icon
+                className={cn(
+                  "h-[18px] w-[18px] transition-all duration-300",
+                  isActive && "fill-primary-foreground/30"
+                )}
+              />
             )}
           </NavLink>
         ))}

@@ -76,14 +76,6 @@ export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props
             onClick={() => onOpen(item.id)}
             className="min-w-0 flex-1 text-left"
           >
-            <div className="flex items-center gap-2 mb-1.5">
-              <CategoryBadge category={item.category} />
-              {item.estimatedCost != null && (
-                <span className="font-display text-sm font-bold text-[hsl(var(--primary))]">
-                  ${item.estimatedCost.toFixed(2)}
-                </span>
-              )}
-            </div>
             <h3
               className={cn(
                 "font-display font-semibold text-card-foreground leading-snug tracking-[-0.01em]",
@@ -92,6 +84,14 @@ export function WishCard({ item, onToggle, onDelete, onPriority, onOpen }: Props
             >
               {item.name}
             </h3>
+            <div className="flex items-center gap-2 mt-1.5">
+              <CategoryBadge category={item.category} />
+              {item.estimatedCost != null && (
+                <span className="font-display text-sm font-bold text-[hsl(var(--primary))]">
+                  ${item.estimatedCost.toFixed(2)}
+                </span>
+              )}
+            </div>
             {item.note && (
               <p className="mt-1 text-xs text-muted-foreground line-clamp-1 leading-relaxed">{item.note}</p>
             )}
