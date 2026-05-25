@@ -20,7 +20,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ];
 
 const Index = () => {
-  const { items, addItem, togglePurchased, deleteItem, editItem, togglePriority, priorityCount, getPriorityItems } = useWishList();
+  const { items, loading, addItem, togglePurchased, deleteItem, editItem, togglePriority, priorityCount, getPriorityItems } = useWishList();
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [showPurchased, setShowPurchased] = useState(false);
@@ -246,7 +246,17 @@ const Index = () => {
 
         <div className="space-y-2.5 pb-32">
           <AnimatePresence mode="popLayout">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-20 text-center"
+              >
+                <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+                <p className="text-sm text-muted-foreground">Loading your stash...</p>
+              </motion.div>
+            ) : filtered.length === 0 ? (
               <motion.div
                 key="empty"
                 initial={{ opacity: 0, y: 20 }}
